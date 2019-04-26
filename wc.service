@@ -1,0 +1,10 @@
+[Unit]
+Description = WC
+
+[Service]
+ExecStart = /home/pi/wc/wc.py
+Restart = always
+Type = simple
+
+[Install]
+WantedBy = multi-user.target

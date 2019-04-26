@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import time
 import RPi.GPIO as GPIO
@@ -26,7 +28,6 @@ def opened():
 
 
 def main():
-    sc.rtm_connect()
     out_counter = EXTENSION_TIME
     in_counter = EXTENSION_TIME
     while True:
@@ -55,4 +56,5 @@ if __name__ == "__main__":
     print('----- START -----')
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(BCM, GPIO.IN)
-    main()
+    if sc.rtm_connect(with_team_state=False, auto_reconnect=True):
+        main()
