@@ -1,7 +1,7 @@
 import os
 import time
 import RPi.GPIO as GPIO
-import slackclient
+from slackclient import SlackClient
 
 BCM = os.getenv('WC_BCM', 23)
 EXTENSION_TIME = 5
