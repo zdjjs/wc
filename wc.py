@@ -31,6 +31,7 @@ def main():
     out_counter = EXTENSION_TIME
     in_counter = EXTENSION_TIME
     while True:
+        sc.rtm_read()
         if GPIO.input(BCM) == GPIO.LOW:
             print('absence')
             out_counter -= 1
