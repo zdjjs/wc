@@ -26,6 +26,7 @@ def opened():
 
 
 def main():
+    sc.rtm_connect()
     out_counter = EXTENSION_TIME
     in_counter = EXTENSION_TIME
     while True:
@@ -54,5 +55,4 @@ if __name__ == "__main__":
     print('----- START -----')
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(BCM, GPIO.IN)
-    sc.rtm_connect()
     main()
