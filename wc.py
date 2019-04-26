@@ -6,7 +6,7 @@ from slackclient import SlackClient
 BCM = os.getenv('WC_BCM', 23)
 EXTENSION_TIME = 5
 SLACK_API_TOKEN = os.getenv('WC_API_TOKEN')
-sc = slackclient(SLACK_API_TOKEN)
+sc = SlackClient(SLACK_API_TOKEN)
 
 
 def closed():
