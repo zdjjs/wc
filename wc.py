@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import time
 import RPi.GPIO as GPIO
 from slackclient import SlackClient
 
 BCM = os.getenv('WC_BCM', 23)
-EXTENSION_TIME = 5
+TRY_TIME = 7
+TURN = 300
 SLACK_API_TOKEN = os.getenv('WC_API_TOKEN')
 sc = SlackClient(SLACK_API_TOKEN)
 
@@ -28,32 +30,32 @@ def opened():
 
 
 def main():
-    out_counter = EXTENSION_TIME
-    in_counter = EXTENSION_TIME
-    while True:
-        sc.rtm_read()
-        if GPIO.input(BCM) == GPIO.LOW:
-            print('absence')
-            out_counter -= 1
-            in_counter = EXTENSION_TIME
-            if out_counter <= 0:
-                opened()
-                out_counter = EXTENSION_TIME
-        else:
-            print('presence')
-            out_counter = EXTENSION_TIME
-            in_counter -= 1
-            if in_counter <= 0:
-                closed()
-                in_counter = EXTENSION_TIME
+    for i in range(TURN):
+        print('TURN ' + str(i))
+        out_counter = 0
+        in_counter = 0
+        for j in range(TRY_TIME):
+            if GPIO.input(BCM) == GPIO.LOW:
+                print('absence')
+                out_counter += 1
+            else:
+                print('presence')
+                in_counter += 1
+            time.sleep(1)
+            sc.rtm_read()
 
-        time.sleep(1)
+        if in_counter < out_counter:
+            opened()
+        else:
+            closed()
+    sys.exit()
 
 
 if __name__ == "__main__":
-    print('BCM                   : ' + str(BCM))
-    print('EXTENSION_TIME        : ' + str(EXTENSION_TIME))
-    print('SLACK_API_TOKEN       : ' + str(SLACK_API_TOKEN))
+    print('BCM              : ' + str(BCM))
+    print('TRY_TIME         : ' + str(TRY_TIME))
+    print('TURN             : ' + str(TURN))
+    print('SLACK_API_TOKEN  : ' + str(SLACK_API_TOKEN))
     print('----- START -----')
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(BCM, GPIO.IN)
